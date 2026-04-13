@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
-import { Eye, Mail } from 'lucide-react';
+import { Diamond } from 'lucide-react';
 import './Login.css';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  
   const login = useStore((state) => state.login);
   const navigate = useNavigate();
 
@@ -24,62 +23,47 @@ export default function Login() {
   };
 
   return (
-    <div className="login-page-wrapper">
-      <div className="login-form-container">
+    <div className="login-container">
+      <div className="login-card animate-fade-in">
+        <div className="login-logo">
+          <Diamond size={32} color="var(--primary)" />
+          <h1 className="text-gradient" style={{ fontSize: '2rem', fontWeight: 700 }}>Sphere</h1>
+        </div>
         
-        <h1 className="login-hero-title">Welcome back</h1>
-        <p className="login-hero-subtitle">Access your account and continue your journey.</p>
+        <h2 className="login-title">Welcome Back</h2>
+        <p className="login-subtitle">Sign in to track your savings goals</p>
 
-        <form onSubmit={handleLogin}>
-          <div className="auth-form-group">
-            <label className="auth-label">Username | Email</label>
-            <div className="auth-input-wrapper">
-              <input
-                type="text"
-                className="auth-input"
-                placeholder="username or email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <div className="auth-input-icon" style={{ opacity: 0.8 }}>
-                 {/* Simplified icon similar to the exact image icon request */}
-                <Mail size={18} />
-              </div>
-            </div>
+        <form onSubmit={handleLogin} className="login-form">
+          <div className="input-group">
+            <label className="input-label" style={{ textAlign: 'left' }}>Email</label>
+            <input
+              type="email"
+              className="input-field"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
           
-          <div className="auth-form-group">
-             <label className="auth-label">Password</label>
-             <div className="auth-input-wrapper">
-               <input
-                 type="password"
-                 className="auth-input"
-                 placeholder="••••••••"
-                 value={password}
-                 onChange={(e) => setPassword(e.target.value)}
-               />
-               <div className="auth-input-icon">
-                 <Eye size={18} />
-               </div>
-             </div>
+          <div className="input-group">
+             <label className="input-label" style={{ textAlign: 'left' }}>Password</label>
+             <input
+               type="password"
+               className="input-field"
+               placeholder="••••••••"
+               value={password}
+               onChange={(e) => setPassword(e.target.value)}
+             />
           </div>
 
-          {error && <span style={{color: '#ef4444', fontSize: '0.85rem', marginBottom: '1rem', display: 'block'}}>{error}</span>}
+          {error && <span className="error-text">{error}</span>}
 
-          <div className="auth-options">
-            <label className="remember-me">
-              <input type="checkbox" className="remember-checkbox" defaultChecked />
-              <span className="remember-text">Remember me</span>
-            </label>
-            <a href="#" className="forgot-password">Forgot password?</a>
-          </div>
-
-          <button type="submit" className="btn-signin">
-            Sign in
+          <button type="submit" className="btn btn-primary login-btn">
+            Sign In
           </button>
         </form>
 
-        <div className="divider">
+        <div className="login-divider">
           <span className="divider-text">Or sign in with</span>
         </div>
 
@@ -92,10 +76,6 @@ export default function Login() {
           </svg>
           Google
         </button>
-
-        <div className="signup-prompt">
-          Don't have an account? <span className="signup-link">Create account</span>
-        </div>
 
       </div>
     </div>
