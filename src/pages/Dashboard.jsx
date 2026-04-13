@@ -9,6 +9,7 @@ import {
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts';
+import AIAdvisor from './AIAdvisor';
 import './Dashboard.css';
 
 // Chart tooltip customization
@@ -29,6 +30,7 @@ const CustomTooltip = ({ active, payload, label, currency }) => {
 export default function Dashboard() {
   const goals = useStore((state) => state.goals);
   const currency = useStore((state) => state.preferences.currency);
+  const financialProfile = useStore((state) => state.financialProfile);
   const addGoal = useStore((state) => state.addGoal);
 
   const [filter, setFilter] = useState('all'); // all, active, completed
@@ -206,10 +208,15 @@ export default function Dashboard() {
       </div>
 
       {filteredGoals.length === 0 ? (
-        <div className="glass-panel" style={{ padding: '4rem 2rem', textAlign: 'center' }}>
-           <Target size={48} color="var(--text-muted)" style={{ margin: '0 auto 1rem', opacity: 0.5 }} />
-           <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>No goals found</h3>
-           <p style={{ color: 'var(--text-muted)' }}>Get started by creating a new savings goal.</p>
+        <div className="glass-panel animate-fade-in" style={{ padding: '5rem 2rem', textAlign: 'center', maxWidth: '600px', margin: '2rem auto' }}>
+           <Target size={64} color="var(--primary)" style={{ margin: '0 auto 1.5rem', opacity: 0.8 }} />
+           <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', fontWeight: 700 }}>Start Your Financial Journey</h3>
+           <p style={{ color: 'var(--text-muted)', lineHeight: '1.6', fontSize: '1.1rem', marginBottom: '2rem' }}>
+             Having clear, personalized financial goals is the best way to maintain clean data and organize your budget. Add a realistic goal now, and our AI Advisor will help you determine the best path forward.
+           </p>
+           <button className="btn btn-primary" onClick={() => setIsModalOpen(true)} style={{ margin: '0 auto' }}>
+            <Plus size={20} /> Let's Go
+           </button>
         </div>
       ) : (
         <div className="goals-grid">
@@ -297,7 +304,14 @@ export default function Dashboard() {
               
               {formError && <p className="error-text" style={{ marginBottom: '1rem' }}>{formError}</p>}
               
-              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+              <AIAdvisor 
+                amount={newGoal.target} 
+                deadline={newGoal.deadline} 
+                profile={financialProfile} 
+                currency={currency} 
+              />
+              
+              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '2rem' }}>
                 <button type="button" className="btn btn-secondary" onClick={() => setIsModalOpen(false)}>Cancel</button>
                 <button type="submit" className="btn btn-primary">Create Goal</button>
               </div>

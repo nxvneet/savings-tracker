@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { Coins, Briefcase, Wallet, Target, Sparkles, ArrowRight, ArrowLeft } from 'lucide-react';
+import AIAdvisor from '../components/AIAdvisor';
 import './Onboarding.css';
 
 export default function Onboarding() {
@@ -141,6 +142,14 @@ export default function Onboarding() {
                 autoFocus
               />
             </div>
+            
+            {goal && Number(goal) > 0 && income && costs && (
+              <AIAdvisor 
+                amount={goal}
+                profile={{ income: Number(income), fixedCosts: Number(costs) }}
+                currency={currency}
+              />
+            )}
           </div>
         )}
 

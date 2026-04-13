@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { v4 as uuidv4 } from 'uuid';
-import mockData from '../data.json';
 
 const loadInitialState = () => {
   const saved = localStorage.getItem('savings-tracker-state');
@@ -8,9 +7,9 @@ const loadInitialState = () => {
     return JSON.parse(saved);
   }
   return {
-    goals: mockData.goals,
-    preferences: mockData.preferences,
-    user: null, // full-stack mock
+    goals: [],
+    preferences: { currency: 'USD' },
+    user: null, 
     isOnboarded: false,
     financialProfile: null
   };
