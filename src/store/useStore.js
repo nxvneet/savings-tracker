@@ -11,6 +11,8 @@ const loadInitialState = () => {
     goals: mockData.goals,
     preferences: mockData.preferences,
     user: null, // full-stack mock
+    isOnboarded: false,
+    financialProfile: null
   };
 };
 
@@ -21,7 +23,9 @@ export const useStore = create((set, get) => ({
     localStorage.setItem('savings-tracker-state', JSON.stringify({
       goals: get().goals,
       preferences: get().preferences,
-      user: get().user
+      user: get().user,
+      isOnboarded: get().isOnboarded,
+      financialProfile: get().financialProfile
     }));
   },
 
@@ -38,6 +42,15 @@ export const useStore = create((set, get) => ({
   // Preferences
   setCurrency: (currency) => {
     set((state) => ({ preferences: { ...state.preferences, currency } }));
+    get().saveState();
+  },
+
+  completeOnboarding: (currency, profile) => {
+    set((state) => ({ 
+      preferences: { ...state.preferences, currency },
+      financialProfile: profile,
+      isOnboarded: true 
+    }));
     get().saveState();
   },
 

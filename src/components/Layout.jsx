@@ -2,6 +2,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { LogOut, Home, Settings, Wallet, Diamond } from 'lucide-react';
 import { logoutGoogle } from '../utils/firebase';
+import TipPopup from './TipPopup';
 import './Layout.css';
 
 export default function Layout() {
@@ -107,6 +108,7 @@ export default function Layout() {
            <Outlet />
         </div>
       </main>
+      <TipPopup />
     </div>
   );
 }

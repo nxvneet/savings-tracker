@@ -7,10 +7,16 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import GoalDetails from './pages/GoalDetails';
 import Login from './pages/Login';
+import Onboarding from './pages/Onboarding';
 
 function PrivateRoute({ children }) {
   const user = useStore((state) => state.user);
-  return user ? children : <Navigate to="/login" />;
+  const isOnboarded = useStore((state) => state.isOnboarded);
+  
+  if (!user) return <Navigate to="/login" />;
+  if (user && !isOnboarded) return <Navigate to="/onboarding" />;
+  
+  return children;
 }
 
 function App() {
@@ -43,6 +49,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/onboarding" element={
+          useStore.getState().user ? <Onboarding /> : <Navigate to="/login" />
+        } />
         
         <Route path="/" element={
           <PrivateRoute>
