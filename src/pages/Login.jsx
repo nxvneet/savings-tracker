@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { Diamond } from 'lucide-react';
+import { signInWithGoogle } from '../utils/firebase';
 import './Login.css';
 
 export default function Login() {
@@ -12,13 +13,26 @@ export default function Login() {
   const login = useStore((state) => state.login);
   const navigate = useNavigate();
 
-  const handleGoogleSignIn = () => {
-    setIsGoogleLoading(true);
-    // Simulate OAuth delay
-    setTimeout(() => {
-      login('mockuser@google.com', 'mockpassword');
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsGoogleLoading(true);
+      setError('');
+      
+      const user = await signInWithGoogle();
+      
+      // Update our global state with the real Google user data
+      login(user.email, 'google-oauth');
+      
+      // We can also store the user profile pic/name into our store directly:
+      useStore.setState({ user: { id: user.uid, email: user.email, name: user.displayName || user.email.split('@')[0], photoURL: user.photoURL } });
+      
       navigate('/');
-    }, 1000);
+    } catch (err) {
+      console.error(err);
+      setError('Failed to authenticate with Google.');
+    } finally {
+      setIsGoogleLoading(false);
+    }
   };
 
   const handleLogin = (e) => {

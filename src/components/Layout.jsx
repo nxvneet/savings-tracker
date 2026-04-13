@@ -1,6 +1,7 @@
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { LogOut, Home, Settings, Wallet, Diamond } from 'lucide-react';
+import { logoutGoogle } from '../utils/firebase';
 import './Layout.css';
 
 export default function Layout() {
@@ -9,7 +10,8 @@ export default function Layout() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await logoutGoogle();
     logout();
     navigate('/login');
   };
@@ -68,7 +70,11 @@ export default function Layout() {
         <div className="user-profile">
           <div className="user-card">
             <div className="avatar">
-              {user?.name?.charAt(0).toUpperCase() || 'U'}
+              {user?.photoURL ? (
+                <img src={user.photoURL} alt="User" style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
+              ) : (
+                user?.name?.charAt(0).toUpperCase() || 'U'
+              )}
             </div>
             <div className="user-name">
               {user?.name || 'User'}
