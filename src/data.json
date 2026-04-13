@@ -1,0 +1,42 @@
+{
+  "goals": [
+    {
+      "id": "1",
+      "name": "Emergency Fund",
+      "target": 10000,
+      "deadline": "2026-12-31",
+      "deposits": [
+        { "id": "d1", "amount": 2000, "date": "2026-01-15T10:00:00Z", "note": "Initial deposit" },
+        { "id": "d2", "amount": 500, "date": "2026-02-15T10:00:00Z", "note": "February savings" },
+        { "id": "d3", "amount": 500, "date": "2026-03-15T10:00:00Z", "note": "March savings" },
+        { "id": "d4", "amount": 1000, "date": "2026-04-10T10:00:00Z", "note": "Tax refund" }
+      ],
+      "status": "active"
+    },
+    {
+      "id": "2",
+      "name": "New Car Downpayment",
+      "target": 5000,
+      "deadline": "2026-08-01",
+      "deposits": [
+        { "id": "d5", "amount": 1000, "date": "2026-01-20T10:00:00Z", "note": "Savings" },
+        { "id": "d6", "amount": 1000, "date": "2026-02-20T10:00:00Z", "note": "Savings" },
+        { "id": "d7", "amount": 1000, "date": "2026-03-20T10:00:00Z", "note": "Savings" }
+      ],
+      "status": "active"
+    },
+    {
+      "id": "3",
+      "name": "Vacation to Japan",
+      "target": 3000,
+      "deadline": "2026-05-01",
+      "deposits": [
+        { "id": "d8", "amount": 3000, "date": "2026-01-05T10:00:00Z", "note": "Fully funded!" }
+      ],
+      "status": "completed"
+    }
+  ],
+  "preferences": {
+    "currency": "USD"
+  }
+}
