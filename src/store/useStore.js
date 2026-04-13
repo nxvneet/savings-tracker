@@ -1,31 +1,23 @@
 import { create } from 'zustand';
 import { v4 as uuidv4 } from 'uuid';
 
-const loadInitialState = () => {
-  const saved = localStorage.getItem('savings-tracker-state');
-  if (saved) {
-    return JSON.parse(saved);
-  }
-  return {
-    goals: [],
-    preferences: { currency: 'USD' },
-    user: null, 
-    isOnboarded: false,
-    financialProfile: null
-  };
-};
-
 export const useStore = create((set, get) => ({
-  ...loadInitialState(),
+  goals: [],
+  preferences: { currency: 'USD' },
+  user: null, 
+  isOnboarded: false,
+  financialProfile: null,
 
   saveState: () => {
-    localStorage.setItem('savings-tracker-state', JSON.stringify({
-      goals: get().goals,
-      preferences: get().preferences,
-      user: get().user,
-      isOnboarded: get().isOnboarded,
-      financialProfile: get().financialProfile
-    }));
+    const user = get().user;
+    if (user && user.id) {
+      localStorage.setItem(`sphere-data-${user.id}`, JSON.stringify({
+        goals: get().goals,
+        preferences: get().preferences,
+        isOnboarded: get().isOnboarded,
+        financialProfile: get().financialProfile
+      }));
+    }
   },
 
   // Auth mock
@@ -34,8 +26,13 @@ export const useStore = create((set, get) => ({
     get().saveState();
   },
   logout: () => {
-    set({ user: null });
-    get().saveState();
+    set({ 
+      user: null, 
+      goals: [], 
+      preferences: { currency: 'USD' }, 
+      isOnboarded: false, 
+      financialProfile: null 
+    });
   },
 
   // Preferences

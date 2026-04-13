@@ -27,15 +27,35 @@ function App() {
     // Listen for real Firebase auth state changes
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
-        // User is securely signed in with Firebase
-        useStore.setState({ 
-          user: { 
-            id: firebaseUser.uid, 
-            email: firebaseUser.email, 
-            name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'User',
-            photoURL: firebaseUser.photoURL 
-          } 
-        });
+        // Look up this specific user's saved state
+        const savedData = localStorage.getItem(`sphere-data-${firebaseUser.uid}`);
+        
+        if (savedData) {
+          const parsed = JSON.parse(savedData);
+          useStore.setState({ 
+            ...parsed,
+            user: { 
+              id: firebaseUser.uid, 
+              email: firebaseUser.email, 
+              name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'User',
+              photoURL: firebaseUser.photoURL 
+            } 
+          });
+        } else {
+          // Fresh user with no local storage history yet
+          useStore.setState({ 
+            goals: [],
+            preferences: { currency: 'USD' },
+            isOnboarded: false,
+            financialProfile: null,
+            user: { 
+              id: firebaseUser.uid, 
+              email: firebaseUser.email, 
+              name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'User',
+              photoURL: firebaseUser.photoURL 
+            } 
+          });
+        }
       } else {
         // User is signed out. Clear local storage session!
         logout();
