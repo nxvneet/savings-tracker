@@ -14,7 +14,7 @@ const GOAL_TEMPLATES = [
     getTarget: (profile) => Math.round(profile.fixedCosts * 4),
     getMonths: () => 6,
     priorityScore: (profile) => 100, // always top priority
-    badgeLabel: '🔥 Priority',
+    badgeLabel: 'Priority',
     badgeColor: '#ef4444',
   },
   {
@@ -66,7 +66,7 @@ const GOAL_TEMPLATES = [
     getTarget: (profile) => Math.round(profile.income * 24),
     getMonths: (profile) => 36,
     priorityScore: (profile) => profile.income > 5000 ? 80 : 30,
-    badgeLabel: '📈 Wealth',
+    badgeLabel: 'Wealth Builder',
     badgeColor: '#10b981',
   },
   {
@@ -79,7 +79,7 @@ const GOAL_TEMPLATES = [
     getTarget: (profile) => Math.round(Math.min(profile.disposable * 3, 800)),
     getMonths: (profile) => 3,
     priorityScore: (profile) => 65,
-    badgeLabel: '⚡ Fast Win',
+    badgeLabel: 'Fast Win',
     badgeColor: '#06b6d4',
   },
   {
