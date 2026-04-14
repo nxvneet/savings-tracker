@@ -56,6 +56,9 @@ function App() {
             } 
           });
         }
+        if (window.location.pathname === '/login') {
+          window.location.href = '/';
+        }
       } else {
         // User is signed out. Clear local storage session!
         logout();

@@ -22,7 +22,16 @@ export const useStore = create((set, get) => ({
 
   // Auth mock
   login: (email, password) => {
-    set({ user: { id: uuidv4(), email, name: email.split('@')[0] } });
+    // Basic deterministic ID so same email = same storage path
+    const deterministicId = `email-${btoa(email).substring(0, 16)}`;
+    set({ user: { id: deterministicId, email, name: email.split('@')[0] } });
+    
+    // Attempt to hydrate storage for this email
+    const savedData = localStorage.getItem(`sphere-data-${deterministicId}`);
+    if (savedData) {
+      set({ ...JSON.parse(savedData) });
+    }
+    
     get().saveState();
   },
   logout: () => {

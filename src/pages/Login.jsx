@@ -10,16 +10,15 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const login = useStore((state) => state.login);
   const navigate = useNavigate();
 
   const handleGoogleSignIn = async () => {
     try {
       setIsGoogleLoading(true);
       setError('');
-      
       await signInWithGoogle();
-      // App.jsx's onAuthStateChanged will detect this login and update store + navigate automatically
-      navigate('/');
+      // App.jsx will handle navigation
     } catch (err) {
       console.error(err);
       setError('Failed to authenticate with Google.');
@@ -28,7 +27,15 @@ export default function Login() {
     }
   };
 
-
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+      setError('Please fill in all fields');
+      return;
+    }
+    login(email, password);
+    navigate('/');
+  };
 
   return (
     <div className="login-container">
@@ -39,9 +46,41 @@ export default function Login() {
         </div>
         
         <h2 className="login-title">Welcome Back</h2>
-        <p className="login-subtitle">Sign in to track your savings goals via a secure Google Account.</p>
+        <p className="login-subtitle">Sign in to track your savings goals</p>
 
-        {error && <span className="error-text" style={{display: 'block', margin: '1rem 0'}}>{error}</span>}
+        <form onSubmit={handleLogin} className="login-form">
+          <div className="input-group">
+            <label className="input-label" style={{ textAlign: 'left' }}>Email</label>
+            <input
+              type="email"
+              className="input-field"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          
+          <div className="input-group">
+             <label className="input-label" style={{ textAlign: 'left' }}>Password</label>
+             <input
+               type="password"
+               className="input-field"
+               placeholder="••••••••"
+               value={password}
+               onChange={(e) => setPassword(e.target.value)}
+             />
+          </div>
+
+          {error && <span className="error-text">{error}</span>}
+
+          <button type="submit" className="btn btn-primary login-btn">
+            Sign In
+          </button>
+        </form>
+
+        <div className="login-divider">
+          <span className="divider-text">Or sign in with</span>
+        </div>
 
         <button 
           type="button" 
@@ -64,7 +103,6 @@ export default function Login() {
             </>
           )}
         </button>
-
       </div>
     </div>
   );
