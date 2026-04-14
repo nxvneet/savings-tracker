@@ -128,8 +128,8 @@ export default function Dashboard() {
     <div className="animate-fade-in">
       <div className="dashboard-header">
         <div>
-          <h1 className="dashboard-title">Overview</h1>
-          <p className="dashboard-subtitle">Track and manage your savings journey.</p>
+          <h1 className="dashboard-title text-gradient">Hello, {useStore(state => state.user?.name) || 'User'}!</h1>
+          <p className="dashboard-subtitle">Here is your dynamic financial overview based on your profile.</p>
         </div>
         <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
           <Plus size={20} />
@@ -166,6 +166,23 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {financialProfile && (
+        <div className="glass-panel" style={{ marginBottom: '2rem', padding: '1.5rem', borderLeft: '4px solid var(--primary)', display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+           <div>
+             <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Monthly Income</span>
+             <h3 style={{ fontSize: '1.25rem' }}>{formatCurrency(financialProfile.income, currency)}</h3>
+           </div>
+           <div>
+             <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Fixed Expenses</span>
+             <h3 style={{ fontSize: '1.25rem' }}>{formatCurrency(financialProfile.fixedCosts, currency)}</h3>
+           </div>
+           <div>
+             <span style={{ fontSize: '0.875rem', color: 'var(--primary)', fontWeight: 600 }}>Disposable Income</span>
+             <h3 style={{ fontSize: '1.25rem', color: 'var(--primary)' }}>{formatCurrency(financialProfile.income - financialProfile.fixedCosts, currency)}</h3>
+           </div>
+        </div>
+      )}
 
       <div className="glass-panel chart-section">
         <h2 className="chart-title">Saving Activity</h2>
