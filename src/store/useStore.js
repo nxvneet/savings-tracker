@@ -7,6 +7,7 @@ export const useStore = create((set, get) => ({
   user: null, 
   isOnboarded: false,
   financialProfile: null,
+  authLoading: true,
 
   saveState: () => {
     const user = get().user;
