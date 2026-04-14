@@ -54,7 +54,8 @@ export default function Layout() {
                 padding: '0.5rem',
                 borderRadius: 'var(--radius-sm)',
                 outline: 'none',
-                fontFamily: 'inherit'
+                fontFamily: 'inherit',
+                marginBottom: '1rem'
               }}
             >
               <option value="USD">USD ($)</option>
@@ -65,6 +66,28 @@ export default function Layout() {
               <option value="AUD">AUD ($)</option>
               <option value="INR">INR (₹)</option>
             </select>
+
+            <button 
+              onClick={() => {
+                if (window.confirm("Are you sure you want to completely erase all your data and start fresh?")) {
+                  const uid = useStore.getState().user?.id;
+                  if (uid) localStorage.removeItem(`sphere-data-${uid}`);
+                  useStore.getState().logout();
+                }
+              }}
+              style={{
+                width: '100%',
+                background: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                color: 'var(--danger)',
+                padding: '0.5rem',
+                borderRadius: 'var(--radius-sm)',
+                cursor: 'pointer',
+                fontSize: '0.875rem'
+              }}
+            >
+              Wipe Account Data
+            </button>
           </div>
         </nav>
 
