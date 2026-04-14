@@ -1,0 +1,141 @@
+.suggestions-section {
+  margin-bottom: 2.5rem;
+}
+
+.suggestions-header {
+  margin-bottom: 1.25rem;
+}
+
+.suggestions-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.suggestions-sparkle {
+  color: var(--primary);
+}
+
+.suggestions-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.suggestions-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.suggestions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.suggestion-card {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.suggestion-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+.suggestion-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+
+.suggestion-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.4rem;
+}
+
+.suggestion-cat {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.suggestion-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.suggestion-desc {
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.suggestion-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.suggestion-amount {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.suggestion-time {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.suggestion-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.suggestion-add-btn {
+  flex: 1;
+  padding: 0.55rem 1rem;
+  font-size: 0.875rem;
+}
+
+.suggestion-dismiss {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  transition: color 0.2s;
+}
+
+.suggestion-dismiss:hover {
+  color: var(--danger);
+}
+
+@media (max-width: 768px) {
+  .suggestions-grid {
+    grid-template-columns: 1fr;
+  }
+}

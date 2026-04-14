@@ -10,6 +10,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts';
 import AIAdvisor from '../components/AIAdvisor';
+import GoalSuggestions from '../components/GoalSuggestions';
 import './Dashboard.css';
 
 // Chart tooltip customization
@@ -124,6 +125,12 @@ export default function Dashboard() {
     setFormError('');
   };
 
+  // Pre-fill modal from a suggestion card
+  const handleSuggestionAdd = ({ name, target }) => {
+    setNewGoal({ name, target: String(target), deadline: '' });
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="animate-fade-in">
       <div className="dashboard-header">
@@ -224,15 +231,23 @@ export default function Dashboard() {
         </select>
       </div>
 
+      {/* Personalised Suggestions */}
+      <GoalSuggestions 
+        profile={financialProfile}
+        currency={currency}
+        existingGoalIds={goals.map(g => g.name.toLowerCase())}
+        onAddGoal={handleSuggestionAdd}
+      />
+
       {filteredGoals.length === 0 ? (
-        <div className="glass-panel animate-fade-in" style={{ padding: '5rem 2rem', textAlign: 'center', maxWidth: '600px', margin: '2rem auto' }}>
+        <div className="glass-panel animate-fade-in" style={{ padding: '4rem 2rem', textAlign: 'center', maxWidth: '600px', margin: '0 auto' }}>
            <Target size={64} color="var(--primary)" style={{ margin: '0 auto 1.5rem', opacity: 0.8 }} />
-           <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', fontWeight: 700 }}>Start Your Financial Journey</h3>
-           <p style={{ color: 'var(--text-muted)', lineHeight: '1.6', fontSize: '1.1rem', marginBottom: '2rem' }}>
-             Having clear, personalized financial goals is the best way to maintain clean data and organize your budget. Add a realistic goal now, and our AI Advisor will help you determine the best path forward.
+           <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', fontWeight: 700 }}>No Goals Yet</h3>
+           <p style={{ color: 'var(--text-muted)', lineHeight: '1.6', fontSize: '1rem', marginBottom: '2rem' }}>
+             Pick a suggestion above or create your own custom goal. Our AI Advisor will tell you if it fits your budget.
            </p>
            <button className="btn btn-primary" onClick={() => setIsModalOpen(true)} style={{ margin: '0 auto' }}>
-            <Plus size={20} /> Let's Go
+            <Plus size={20} /> Create Custom Goal
            </button>
         </div>
       ) : (
