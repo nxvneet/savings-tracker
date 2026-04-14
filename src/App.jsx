@@ -14,12 +14,35 @@ function PrivateRoute({ children }) {
   const isOnboarded = useStore((state) => state.isOnboarded);
   const authLoading = useStore((state) => state.authLoading);
   
-  if (authLoading) return <div className="loading-screen"><div className="loader"></div></div>;
+  // Show spinner while Firebase resolves session
+  if (authLoading) {
+    return (
+      <div className="loading-screen">
+        <div className="loader"></div>
+      </div>
+    );
+  }
   
   if (!user) return <Navigate to="/login" replace />;
-  if (user && !isOnboarded) return <Navigate to="/onboarding" replace />;
-  
   return children;
+}
+
+function OnboardingRoute() {
+  const user = useStore((state) => state.user);
+  const isOnboarded = useStore((state) => state.isOnboarded);
+  const authLoading = useStore((state) => state.authLoading);
+
+  if (authLoading) {
+    return (
+      <div className="loading-screen">
+        <div className="loader"></div>
+      </div>
+    );
+  }
+
+  if (!user) return <Navigate to="/login" replace />;
+  if (isOnboarded) return <Navigate to="/" replace />;
+  return <Onboarding />;
 }
 
 function AuthListener() {
@@ -28,19 +51,26 @@ function AuthListener() {
   const logout = useStore((state) => state.logout);
 
   useEffect(() => {
+    // Safety: if Firebase never responds in 8s, unblock the UI
+    const fallbackTimer = setTimeout(() => {
+      const { authLoading } = useStore.getState();
+      if (authLoading) {
+        useStore.setState({ authLoading: false });
+      }
+    }, 8000);
+
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      clearTimeout(fallbackTimer);
+
       if (firebaseUser) {
         const savedData = localStorage.getItem(`sphere-data-${firebaseUser.uid}`);
         
-        const newState = savedData ? JSON.parse(savedData) : {
-          goals: [],
-          preferences: { currency: 'USD' },
-          isOnboarded: false,
-          financialProfile: null
-        };
+        const restoredState = savedData
+          ? JSON.parse(savedData)
+          : { goals: [], preferences: { currency: 'USD' }, isOnboarded: false, financialProfile: null };
 
         useStore.setState({ 
-          ...newState,
+          ...restoredState,
           user: { 
             id: firebaseUser.uid, 
             email: firebaseUser.email, 
@@ -50,17 +80,25 @@ function AuthListener() {
           authLoading: false
         });
 
+        // Only navigate away from login, let PrivateRoute handle other redirects
         if (location.pathname === '/login') {
-          navigate('/', { replace: true });
+          const { isOnboarded } = useStore.getState();
+          navigate(isOnboarded ? '/' : '/onboarding', { replace: true });
         }
       } else {
         logout();
         useStore.setState({ authLoading: false });
+        if (location.pathname !== '/login') {
+          navigate('/login', { replace: true });
+        }
       }
     });
 
-    return () => unsubscribe();
-  }, [logout, navigate, location.pathname]);
+    return () => {
+      clearTimeout(fallbackTimer);
+      unsubscribe();
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return null;
 }
@@ -71,11 +109,7 @@ function App() {
       <AuthListener />
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/onboarding" element={
-          <PrivateRoute>
-            <Onboarding />
-          </PrivateRoute>
-        } />
+        <Route path="/onboarding" element={<OnboardingRoute />} />
         
         <Route path="/" element={
           <PrivateRoute>
@@ -86,7 +120,6 @@ function App() {
           <Route path="goal/:id" element={<GoalDetails />} />
         </Route>
         
-        {/* Catch all */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
