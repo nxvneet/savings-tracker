@@ -10,7 +10,6 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const login = useStore((state) => state.login);
   const navigate = useNavigate();
 
   const handleGoogleSignIn = async () => {
@@ -18,14 +17,8 @@ export default function Login() {
       setIsGoogleLoading(true);
       setError('');
       
-      const user = await signInWithGoogle();
-      
-      // Update our global state with the real Google user data
-      login(user.email, 'google-oauth');
-      
-      // We can also store the user profile pic/name into our store directly:
-      useStore.setState({ user: { id: user.uid, email: user.email, name: user.displayName || user.email.split('@')[0], photoURL: user.photoURL } });
-      
+      await signInWithGoogle();
+      // App.jsx's onAuthStateChanged will detect this login and update store + navigate automatically
       navigate('/');
     } catch (err) {
       console.error(err);
@@ -35,16 +28,7 @@ export default function Login() {
     }
   };
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (!email || !password) {
-      setError('Please fill in all fields');
-      return;
-    }
-    // Mock login
-    login(email, password);
-    navigate('/');
-  };
+
 
   return (
     <div className="login-container">
@@ -55,41 +39,9 @@ export default function Login() {
         </div>
         
         <h2 className="login-title">Welcome Back</h2>
-        <p className="login-subtitle">Sign in to track your savings goals</p>
+        <p className="login-subtitle">Sign in to track your savings goals via a secure Google Account.</p>
 
-        <form onSubmit={handleLogin} className="login-form">
-          <div className="input-group">
-            <label className="input-label" style={{ textAlign: 'left' }}>Email</label>
-            <input
-              type="email"
-              className="input-field"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          
-          <div className="input-group">
-             <label className="input-label" style={{ textAlign: 'left' }}>Password</label>
-             <input
-               type="password"
-               className="input-field"
-               placeholder="••••••••"
-               value={password}
-               onChange={(e) => setPassword(e.target.value)}
-             />
-          </div>
-
-          {error && <span className="error-text">{error}</span>}
-
-          <button type="submit" className="btn btn-primary login-btn">
-            Sign In
-          </button>
-        </form>
-
-        <div className="login-divider">
-          <span className="divider-text">Or sign in with</span>
-        </div>
+        {error && <span className="error-text" style={{display: 'block', margin: '1rem 0'}}>{error}</span>}
 
         <button 
           type="button" 
