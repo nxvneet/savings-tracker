@@ -9,7 +9,7 @@ import {
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts';
-import AIAdvisor from './AIAdvisor';
+import AIAdvisor from '../components/AIAdvisor';
 import './Dashboard.css';
 
 // Chart tooltip customization
